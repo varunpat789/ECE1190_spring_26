@@ -174,6 +174,7 @@ dts config docker credentials info
 Install the simulator in a virtual environment:
 
 ```sh
+sudo apt install python3-pip
 pip3 install virtualenv
 cd ~ && virtualenv dt-sim
 source dt-sim/bin/activate
@@ -184,8 +185,8 @@ sudo apt-get install freeglut3-dev
 
 NOTE: I had to modify some of their dependencies to get it to work:
 ```sh
-pip install "pyglet==1.5.11"
-pip install "numpy>=1.21,<1.24"
+pip3 install "pyglet==1.5.11"
+pip3 install "numpy>=1.21,<1.24"
 ```
 
 Let's run a test script! In your virtual environment:
