@@ -25,11 +25,27 @@ wsl --list -v
 
 For troubleshooting, see the [WSL install manual](https://learn.microsoft.com/en-us/windows/wsl/install-manual) or [troubleshooting guide](https://learn.microsoft.com/en-us/windows/wsl/troubleshooting).
 
+In your WSL bash terminal:
+
+```sh
+sudo apt update
+sudo apt upgrade
+```
+
+### 1.5. Using WSL2 w/ VSCode DevContainers
+
+Open up [VSCode](https://code.visualstudio.com/download) on your Windows machine. Install the `Remote Development` Extension. In the bottom-left, click on the Remote Window button (blue w/ arrows).
+![alt text](https://canonical-ubuntu-wsl.readthedocs-hosted.com/en/latest/_images/remote-extension.png)
+
+Select `Connect to WSL using Distro` and select `Ubuntu-22.04`.
+
+This will open VSCode in your newly made WSL environment.
+
 ---
 
 ## 2. Configure Git and SSH Keys
 
-Set up Git credentials matching your GitHub account:
+In a WSL bash terminal, set enter your Git credentials:
 
 ```sh
 git config --global user.name "your_user_name"
@@ -88,6 +104,7 @@ The Duckietown Shell (`dts`) is a CLI that provides key operations like updating
 
 ```sh
 pipx install duckietown-shell
+pipx upgrade duckietown-shell
 ```
 
 **Checkpoint:**
@@ -152,75 +169,48 @@ dts config docker credentials info
 
 ---
 
-## 9. Flash the SD Card
+## 9. Duckietown-Gym [Simulation](https://docs.duckietown.com/daffy/devmanual-software/intermediate/simulation/gym-simulation-in-duckietown.html)
 
-Choose a hostname for your robot. Valid hostnames must be lowercase, start with a letter, and contain only letters, numbers, and underscores.
-
-Insert your SD card with a reader, then run:
+Install the simulator in a virtual environment:
 
 ```sh
-dts init_sd_card --hostname <HOSTNAME> --type duckiebot --configuration DB21M --wifi designlab:designlab1
+pip3 install virtualenv
+cd ~ && virtualenv dt-sim
+source dt-sim/bin/activate
+pip3 install duckietown-gym-daffy
+
+sudo apt-get install freeglut3-dev
 ```
 
-When prompted, enter `32` for the microSD card size.
-
----
-
-## 10. Boot the Duckiebot
-
-1. Insert the SD card into your robot
-2. Press the button on side (by the battery) to boot
-
-Ensure your computer is connected to the same WiFi network as the Duckiebot. You can monitor the boot process:
-
+NOTE: I had to modify some of their dependencies to get it to work:
 ```sh
-dts fleet discover
+pip install "pyglet==1.5.11"
+pip install "numpy>=1.21,<1.24"
 ```
 
-This displays all reachable Duckiebots with their model, hostname, and status.
-
----
-
-## 11. Post-Boot Updates
-
-Once the status shows **Ready**, it is done booting. Now update the software:
-
+Let's run a test script! In your virtual environment:
 ```sh
-dts duckiebot update <DUCKIEBOT_HOSTNAME>
+sudo apt install gedit
+touch test_sim.py
+gedit test_sim.py
+# copy & paste `test_sim.py`
+python test_sim.py
 ```
 
 ---
 
-## 12. Access the Dashboard
 
-Your dashboard has key robot debugging tools, sensor streams, and health information. Open your browser and navigate to:
+To run prebuild examples, in your virtual environment, clone the simulation repository:
 
+```sh
+git clone https://github.com/duckietown/gym-duckietown.git
 ```
-http://<YOUR_DUCKIEBOT_NAME>.local/
-```
 
-NOTE: If that doesn't work, try without `.local`:
+Run the simulation!
 
-```
-http://<YOUR_DUCKIEBOT_NAME>/
+```sh
+./gym-duckietown/manual_control.py --env-name Duckietown-udem1-v0
+# Try controlling the DuckieBot with your arrow keys
 ```
 
 ---
-
-## 13. Start Roboting!
-
-To move your Duckiebot, open a terminal and run:
-```sh
-dts duckiebot keyboard_control <DUCKIEBOT_NAME>
-```
-
-## Common Commands
-
-| Action        | Command                             |
-| ------------- | ----------------------------------- |
-| Shutdown      | `dts duckiebot shutdown <HOSTNAME>` |
-| Reboot        | `dts duckiebot reboot <HOSTNAME>`   |
-| Discover bots | `dts fleet discover`                |
-| SSH           | `ssh duckie@<ROBOT_HOSTNAME>.local` |
-
-Note that shutdown can take up to 20 seconds.
