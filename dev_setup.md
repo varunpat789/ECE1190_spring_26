@@ -197,7 +197,7 @@ pip3 install "numpy>=1.21,<1.24"
 
 Let's run a test script! In your virtual environment:
 ```sh
-sudo apt install gedit
+sudo apt install gedit python-is-python3
 touch test_sim.py
 gedit test_sim.py
 # copy & paste `test_sim.py`
