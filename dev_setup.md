@@ -90,6 +90,12 @@ Follow the [Docker Desktop WSL instructions](https://docs.docker.com/desktop/fea
 
 You will need to restart your system after installation.
 
+Note that, before integration, you will need to shut down WS:
+
+```sh
+wsl --shutdown
+```
+
 **Checkpoint:**
 
 ```sh
