@@ -5,7 +5,7 @@ import numpy as np
 
 env = Simulator(
     seed=123,
-    map_name="loop_empty",
+    map_name="small_loop",
     max_steps=500001,
     domain_rand=0,
     camera_width=640,
